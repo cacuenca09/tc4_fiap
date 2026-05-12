@@ -2,6 +2,7 @@ FROM python:3.11-slim
 
 LABEL maintainer="lstm-stock-predictor"
 LABEL description="LSTM Stock Price Predictor API"
+LABEL version="2.0"
 
 # ─── System dependencies ───────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -127,11 +127,12 @@ async def startup_event():
     logger.info("🚀 Iniciando LSTM Stock Predictor API…")
 
     if not os.path.exists(MODEL_PATH):
-        logger.warning("⚠️  Modelo não encontrado em %s. Execute model/train.py primeiro.", MODEL_PATH)
+        logger.warning("⚠️  Modelo não encontrado em %s.", MODEL_PATH)
+        logger.warning("    Arquivos em /app/model: %s", os.listdir(os.path.join(BASE_DIR, '..', 'model')))
         return
 
     try:
-        logger.info("Carregando modelo LSTM de %s", MODEL_PATH)
+        logger.info("Carregando modelo de %s", MODEL_PATH)
         _model  = _load_keras_model(MODEL_PATH)
         _scaler = joblib.load(SCALER_PATH)
 
@@ -143,7 +144,6 @@ async def startup_event():
                     _meta.get('seq_len', 60), _meta.get('symbol', 'AAPL'))
     except Exception as exc:
         logger.error("❌ Falha ao carregar modelo: %s", exc)
-
 
 # ─── Middleware de monitoramento ──────────────────────────────────────────────
 @app.middleware("http")

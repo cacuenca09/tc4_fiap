@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  lstm-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lstm-stock-predictor
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./model:/app/model   # monta os artefatos treinados
+    environment:
+      - TF_CPP_MIN_LOG_LEVEL=3
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "com.docker.description=LSTM Stock Price Predictor"
+
+  # ─── Prometheus (monitoramento) ────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    container_name: lstm-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=15d"
+    depends_on:
+      - lstm-api
+
+  # ─── Grafana (dashboards) ──────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: lstm-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=lstm1234
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:

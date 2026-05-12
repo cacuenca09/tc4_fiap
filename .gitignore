@@ -1,0 +1,34 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# Artefatos de modelo (gerados pelo train.py)
+model/lstm_model.h5
+model/scaler.pkl
+model/monitor.jsonl
+
+# Outputs de notebook
+notebooks/.ipynb_checkpoints/
+notebooks/outputs/
+
+# Docker volumes locais
+prometheus_data/
+grafana_data/
+
+# Misc
+.DS_Store
+*.log
+dist/
+build/
+*.egg-info/
+model/lstm_model.keras
+model/*.png
+model/model_meta.json
+model/metrics.json
+model/lstm_model.keras
+model/*.png
+model/model_meta.json
+model/metrics.json

@@ -5,9 +5,9 @@ __pycache__/
 venv/
 .env
 
-# Artefatos de modelo (gerados pelo train.py)
+# Modelo (commitando para deploy no Render)
 model/lstm_model.h5
-model/scaler.pkl
+model/*.png
 model/monitor.jsonl
 
 # Outputs de notebook
@@ -24,11 +24,3 @@ grafana_data/
 dist/
 build/
 *.egg-info/
-model/lstm_model.keras
-model/*.png
-model/model_meta.json
-model/metrics.json
-model/lstm_model.keras
-model/*.png
-model/model_meta.json
-model/metrics.json
